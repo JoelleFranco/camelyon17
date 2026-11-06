@@ -1,2 +1,5 @@
 # Environnement virtuel Python
 .venv/
+
+# Données non versionnées
+data/
