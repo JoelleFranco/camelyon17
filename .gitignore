@@ -1,6 +1,9 @@
 # Environnement virtuel Python
 .venv/
 
+# Fichiers non terminés
+version_finale/
+
 # Données non versionnées
 data/
 
