@@ -28,9 +28,6 @@ version_finale/
 requirements.txt
 ```
 
-`camelyon_data.py` et `extract_patches.py` ont été écrits au départ par une camarade de la promotion, puis modifiés pour la
-version finale. La liste des modifications est en tête de chaque fichier.
-
 ## Installation
 
 ### Prérequis
