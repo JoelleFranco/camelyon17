@@ -2,10 +2,14 @@
 .venv/
 
 # Fichiers non terminés
-version_finale/
+version_finale_joelle/
 
 # Données non versionnées
 data/
+version_finale/patches/
+version_finale/cartes/
+version_finale/resultats/
+__pycache__/
 
-# Mes notes
+# Notes personnelles
 notes_personnelles/
