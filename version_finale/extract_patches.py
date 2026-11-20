@@ -151,28 +151,28 @@ def candidate_patches(row, pool, args):
     slide, thumb, level = read_level_parallel(pool, args.level, args.workers) # Chargement de la lame et de sa miniature (lecture parallèle)
     xml = row["xml_path"] if not pd.isna(row["xml_path"]) else None # Remplacement des valeurs manquantes (NaN) par None
     mask = cd.xml_to_mask(xml, slide, level) if xml else np.zeros(thumb.shape[:2], np.uint8) # Masque tumoral à partir du XML, ou masque vide si la lame n'est pas annotée
-    W0, H0 = slide.dimensions# Récupération des dimensions de la lame au niveau initial
+    W0, H0 = slide.dimensions # Récupération des dimensions de la lame au niveau initial
     pas, _ = geometrie(slide, args) # Taille d'un patch en pixels du niveau 0
     gw, gh = W0 // pas, H0 // pas # Calcul du nombre de patches sur chaque axe
 
-    ds_t = slide.level_downsamples[level] # réduction de la miniature (sert plus bas pour couvert)
-    tissue = detect_purple(thumb, args.violet_s_min).astype(np.float32)# Détection des régions tissulaires sur la miniature
+    ds_t = slide.level_downsamples[level] # Réduction de la miniature (sert plus bas pour couvert)
+    tissue = detect_purple(thumb, args.violet_s_min).astype(np.float32) # Détection des régions tissulaires sur la miniature
 
-    def couvert(image, ds): # la partie de l'image couverte par la grille
+    def couvert(image, ds): # La partie de l'image couverte par la grille
         return image[:int(round(gh * pas / ds)), :int(round(gw * pas / ds))]
-    tissue_frac = cv2.resize(couvert(tissue, ds_t), (gw, gh), interpolation=cv2.INTER_AREA)# Redimensionnement du masque tissulaire à la grille des patches
-    tumor_frac = cv2.resize(couvert(mask, ds_t).astype(np.float32), (gw, gh), interpolation=cv2.INTER_AREA)# Redimensionnement du masque tumoral à la même résolution
+    tissue_frac = cv2.resize(couvert(tissue, ds_t), (gw, gh), interpolation=cv2.INTER_AREA) # Redimensionnement du masque tissulaire à la grille des patches
+    tumor_frac = cv2.resize(couvert(mask, ds_t).astype(np.float32), (gw, gh), interpolation=cv2.INTER_AREA) # Redimensionnement du masque tumoral à la même résolution
 
     k = 8
     n_c = max(1, int(round(k * args.centre_um / (args.patch_um or pas * cd.taille_pixel_um(slide)))))
-    d = (k - n_c) // 2 # nombre de petites cases avant la zone centrale
+    d = (k - n_c) // 2 # Nombre de petites cases avant la zone centrale
     fin = cv2.resize(couvert(mask, ds_t).astype(np.float32), (k * gw, k * gh), interpolation=cv2.INTER_AREA)
     tumor_centre = fin.reshape(gh, k, gw, k)[:, d:d + n_c, :, d:d + n_c].mean(axis=(1, 3))
 
-    rows, cols = np.nonzero(tissue_frac >= args.min_tissue)# Récupération des positions dont la proportion de tissu dépasse le seuil minimal.
-    tf, tu = tissue_frac[rows, cols], tumor_frac[rows, cols]# Extraction des proportions tissulaires et tumorales
+    rows, cols = np.nonzero(tissue_frac >= args.min_tissue) # Récupération des positions dont la proportion de tissu dépasse le seuil minimal.
+    tf, tu = tissue_frac[rows, cols], tumor_frac[rows, cols] # Extraction des proportions tissulaires et tumorales
     cand = pd.DataFrame({"x": cols * pas, "y": rows * pas, "tissue_frac": tf, "tumor_frac": tu})# Création du DataFrame contenant les coordonnées et les proportions associées à chaque patch
-    tc = tumor_centre[rows, cols] # ===== AJOUT (version finale) : part de tumeur dans la zone centrale =====
+    tc = tumor_centre[rows, cols]
     if xml:
         proches = cv2.dilate((tumor_frac > 0).astype(np.uint8), np.ones((3, 3), np.uint8))[rows, cols] > 0
         tumeurs, exclus = polygones_xml(xml)
@@ -188,8 +188,8 @@ def candidate_patches(row, pool, args):
             cand["label"] = np.where(tc > 0, "tumor", np.where(tu == 0, "normal", "border"))
         else:
             cand["label"] = np.where(tu >= args.tumor_thr, "tumor", np.where(tu == 0, "normal", "border"))
-        cand = cand[cand.label != "border"]    # Suppression des patches situés sur les frontières tumorales
-    elif row.get("slide_label") == "negative":# Attribution du label normal aux lames négatives
+        cand = cand[cand.label != "border"] # Suppression des patches situés sur les frontières tumorales
+    elif row.get("slide_label") == "negative": # Attribution du label normal aux lames négatives
         cand["label"] = "normal"
     else:
         cand["label"] = "unlabeled"  # Attribution du label non renseigné aux autres lames
@@ -206,7 +206,7 @@ def save_preview(path, thumb, tissue, mask, chosen, patch, ds):
     colors = {"tumor": (255, 0, 0), "normal": (0, 0, 255), "unlabeled": (128, 128, 128)}# Définition des couleurs associées à chaque classe de patches : rouge pour les tumoraux, bleu pour les normaux et gris pour les non étiquetés
     s = max(1, int(round(patch / ds)))# Calcul de la taille des rectangles à dessiner sur la miniature en tenant compte du facteur de réduction, avec une taille minimale d'un pixel
     for r in chosen.itertuples():# Parcours des patches sélectionnés afin de les représenter sur l'image de prévisualisation
-        x, y = int(r.x / ds), int(r.y / ds)# Conversion des coordonnées du patch depuis la résolution originale vers les coordonnées correspondantes sur la miniature
+        x, y = int(r.x / ds), int(r.y / ds) # Conversion des coordonnées du patch depuis la résolution originale vers les coordonnées correspondantes sur la miniature
         cv2.rectangle(img, (x, y), (x + s, y + s), colors[r.label], 1)# Dessin d'un rectangle autour de chaque patch sélectionné en utilisant la couleur correspondant à sa classe
     cv2.imwrite(str(path), cv2.cvtColor(img, cv2.COLOR_RGB2BGR))# Conversion de l'image du format RGB vers BGR puis sauvegarde de l'image de prévisualisation au chemin spécifié
 
@@ -229,8 +229,8 @@ def process_slide(row, args): # Extraction des patches à partir de la lame et d
     for label, group in cand.groupby("label"): # Regroupement des patches selon leur classe
         n = args.max_tumor if label == "tumor" else args.max_normal # Définition du nombre maximal de patches à sélectionner selon leur classe
         idx = rng.permutation(len(group))[:n] # Sélection aléatoire des indices des patches dans chaque groupe
-        chosen.append(group.iloc[idx])# Ajout des patches sélectionnés à la liste
-    chosen = pd.concat(chosen) if chosen else cand.iloc[:0]# Concaténation des groupes sélectionnés dans un seul DataFrame, ou création d'un DataFrame vide si aucun patch n'a été sélectionné
+        chosen.append(group.iloc[idx]) # Ajout des patches sélectionnés à la liste
+    chosen = pd.concat(chosen) if chosen else cand.iloc[:0] # Concaténation des groupes sélectionnés dans un seul DataFrame, ou création d'un DataFrame vide si aucun patch n'a été sélectionné
     chosen = chosen.sort_values(["y", "x"]) # Tri par position : des patches voisins se trouvent dans les mêmes blocs du fichier, téléchargés une seule fois
 
     ds = slide.dimensions[0] / thumb.shape[1] # Calcul du facteur de réduction entre la largeur de la lame originale et celle de sa miniature
