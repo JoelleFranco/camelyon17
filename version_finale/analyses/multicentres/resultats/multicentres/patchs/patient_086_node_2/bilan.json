@@ -1,0 +1,16 @@
+{
+  "secondes": 6.179620100010652,
+  "quotas": {
+    "0": 200,
+    "1": 0
+  },
+  "obtenus": {
+    "0": 200,
+    "1": 0
+  },
+  "controles": {
+    "candidats_lus": 274,
+    "masque_incomplet": 0,
+    "image_incomplete": 0
+  }
+}
