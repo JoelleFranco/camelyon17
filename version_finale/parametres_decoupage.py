@@ -1,5 +1,3 @@
-# MODIF JOELLE : NOUVEAU FICHIER POUR PARAMETRER LE DECOUPAGE ET TESTER DES VARIANTES
-# 
 # Fichier de paramétrage du découpage et de définition des variantes à tester + celle à retenir.
 #
 # Tous les réglages du découpage au même endroit :

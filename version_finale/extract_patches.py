@@ -1,18 +1,4 @@
-# MODIFS JOELLE :
-# - Pour les variantes à tester : import de parametres_decoupage.py et option --variante. main lit les réglages du fichier
-#   et appelle lancer une fois par variante. Sans --variante = les valeurs par défaut.
-# - Sélection des lames : options --selection et --sets. On découpe les lames du fichier de sélection
-#   (entraînement et validation), et chaque patch garde son set (colonne "set" de patches.csv).
-# - Surface fixe : option --patch-um et fonction geometrie. Un patch couvre toujours 112 µm quel que soit le niveau et le scanner.
-# - Détection du tissu : seuil de saturation de detect_purple réglable (option --violet-s-min).
-# - Étiquetage "centre" en plus de "pourcentage" (options --labelling et --centre-um, colonne tumor_frac_centre)
-# - Mesure fine de la tumeur (fonctions polygones_xml et mesure_fine) pour les patchs proches de la tumeur, la part
-#   de tumeur est mesurée sur les contours XML redessinés à 0,5 µm par pixel et non sur le masque
-#   de la miniature (8 µm par pixel) trop imprécis pour l'étiquetage "centre".
-# - Zones vides des lames en blanc et non en noir (cd.rgb_fond_blanc, dans read_level_parallel et cd.read_patch).
-# - patches.csv : colonnes ajoutées (set, tumor_frac_centre, patch_um, taille_lue, labelling, violet_s_min).
-#
-# # extract_patches.py : découpage des lames en patchs
+# Fichier de découpage des lames en patchs
 #   Pour chaque lame choisie : repérer le tissu sur une miniature, poser une grille de patchs de 112 µm,
 #     calculer la part de tumeur de chaque patch (lames annotées), lui donner une étiquette (tumor / normal), tirer au plus
 #     250 patchs de chaque étiquette, puis lire chacun dans la lame, revérifier son tissu et l'enregistrer en PNG

@@ -1,9 +1,3 @@
-# MODIFS JOELLE :
-# - Ajout de la fonction rgb_fond_blanc (partie 4) afin que les zones vides des lames deviennent blanches au lieu de noires.
-# - Ajout de la fonction taille_pixel_um (partie 4) : taille d'un pixel en µm lue dans la lame (elle varie selon le scanner).
-#   Elle sert à découper toujours la même surface, quel que soit le scanner.
-# - load_slide et read_patch utilisent rgb_fond_blanc au lieu de .convert("RGB").
-#
 # Fichier avec les fonctions de base pour accéder aux données CAMELYON17
 #
 #   1. Exploration du bucket AWS : lister un dossier (sert seulement à explorer à la main).
