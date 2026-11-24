@@ -1,13 +1,15 @@
 # Détection de métastases du cancer du sein (CAMELYON17)
 
-Projet de deep learning (MBA 2) : détecter les métastases du cancer du sein dans des lames de ganglions lymphatiques
-(jeu de données public CAMELYON17), puis en déduire le stade pN de chaque patiente.
+Ce projet vise à détecter les métastases du cancer du sein dans des lames de ganglions lymphatiques (jeu de données public CAMELYON17), puis en déduire le stade pN de chaque patiente.
 
 La chaîne de traitement :
-1. découper les lames en petits carrés (patchs) de 112 µm, étiquetés sain ou tumoral grâce aux annotations des pathologistes ;
-2. modèle de patch : caractéristiques d'un ResNet18 pré-entraîné (non modifié), puis régression logistique ;
-3. lame entière : carte de chaleur, recherche des lésions et mesure de la plus grande, classe de la lame (négative, ITC, micro, macro) ;
-4. patiente : stade pN à partir de ses lames, comparé au vrai stade avec le kappa pondéré.
+1. découper les lames en petits carrés (patchs) de 112 µm, étiquetés sain ou tumoral grâce aux annotations des pathologistes
+2. modèle de patch : caractéristiques d'un ResNet18 pré-entraîné (non modifié), puis régression logistique
+3. lame entière : carte de chaleur, recherche des lésions et mesure de la plus grande, classe de la lame (négative, ITC, micro, macro)
+4. patiente : stade pN à partir de ses lames, comparé au vrai stade avec le kappa pondéré
+
+Deux analyses complémentaires étudient le domain shift (un modèle face à un hôpital qu'il n'a jamais vu) : un centre mis de côté à l'entraînement, et la normalisation des couleurs (Reinhard, Macenko).
+
 
 ## Organisation du dépôt
 
@@ -23,8 +25,17 @@ version_finale/
     cartes_chaleur.py                  caractéristiques de tout le tissu des lames de validation et de test
     notebooks/
         01_preparation_donnees.ipynb       index, sélection des lames, détection du tissu, choix de l'étiquetage
-        02_modelisation_evaluation.ipynb   modèle de patch, lames entières, patientes, test et analyse des erreurs
-    data/, patches/, cartes/, resultats/   fichiers produits par les scripts (ignorés par Git)
+        02_modelisation_evaluation.ipynb   modèle de patch, lames entières, patientes, test et analyse des erreurs (Grad-CAM)
+    analyses/
+        domain_shift/analyse_domain_shift.ipynb   modèle final avec un centre mis de côté à l'entraînement
+        multicentres/                              normalisation des couleurs (Reinhard, Macenko) sur les patchs du prototype
+            multicentres.ipynb                     résultats et conclusions (relit predictions.csv)
+            predictions.csv                        prédictions de chaque méthode pour chaque patch
+            README.md                              utilisation de l'analyse
+    data/          annotations XML, stages.csv et sélection des lames (ignoré par Git)
+    patches/       patchs PNG découpés, par variante et par niveau (ignoré par Git)
+    cartes/        caractéristiques ResNet18 de tout le tissu des lames de validation et de test (ignoré par Git)
+    resultats/     caractéristiques des patchs, modèle final, réglages figés, résultats du test (ignoré par Git)
 requirements.txt
 ```
 
@@ -71,8 +82,7 @@ OpenSlide est installé par pip avec ses fichiers système (`openslide-bin`) : r
 
 ## Prototype
 
-Le notebook est `decouverte_prototype/01_decouverte_et_prototype.ipynb`. Dans VS Code (avec les extensions Python et Jupyter)
-ou dans Jupyter, choisir l'environnement `.venv` comme noyau (kernel), puis exécuter les cellules dans l'ordre.
+Le notebook est `decouverte_prototype/01_decouverte_et_prototype.ipynb`. Dans VS Code (avec les extensions Python et Jupyter) ou dans Jupyter, choisir l'environnement `.venv` comme noyau (kernel), puis exécuter les cellules dans l'ordre.
 Attention, l'exécution du notebook complet prend plus d'une heure.
 
 Le notebook télécharge lui-même ses données avec AWS CLI (installé par `requirements.txt`) :
@@ -82,9 +92,7 @@ Le notebook télécharge lui-même ses données avec AWS CLI (installé par `req
 
 ## Version finale
 
-Les commandes se lancent dans un terminal depuis le dossier `version_finale`, et les notebooks s'y placent eux-mêmes
-(les chemins sont donc les mêmes partout). Les lames sont lues directement sur AWS, sans les télécharger :
-seuls les annotations XML et `stages.csv` sont téléchargés dans `version_finale/data/CAMELYON17/`.
+Les commandes se lancent dans un terminal depuis le dossier `version_finale`, et les notebooks s'y placent eux-mêmes (les chemins sont donc les mêmes partout). Les lames sont lues directement sur AWS, sans les télécharger : seuls les annotations XML et `stages.csv` sont téléchargés dans `version_finale/data/CAMELYON17/`.
 
 Ordre d'exécution :
 
@@ -103,9 +111,40 @@ Ordre d'exécution :
    ```
    python cartes_chaleur.py --niveau 2
    ```
-6. **Notebook `02_modelisation_evaluation`, partie 6** (lames de validation) : choix du seuil, puis les réglages sont figés
-   dans `resultats/reglages_figes.json`.
-7. **Notebook `02_modelisation_evaluation`, parties 7 et 8** : test (une seule fois, avec les réglages figés) et analyse des erreurs.
+6. **Notebook `02_modelisation_evaluation`, partie 6** (lames de validation) : choix du seuil de la carte et de la taille
+   minimale des lésions, Grad-CAM des fausses alertes, puis les réglages sont figés dans `resultats/reglages_figes.json`.
+7. **Notebook `02_modelisation_evaluation`, parties 7 et 8** : test (une seule fois, avec les réglages figés) et analyse
+   des erreurs, de la patiente aux patchs (Grad-CAM).
+
+Fichiers produits dans `version_finale` :
+
+| Fichier | Produit par | Contenu |
+|---|---|---|
+| `data/CAMELYON17/selection_lames.csv` | notebook 01, partie 2 | lames choisies et leur set (entraînement, validation, test) |
+| `patches/<variante>/niveau_<n>/` | `extract_patches.py` | patchs PNG d'entraînement et de validation, `patches.csv`, aperçus des lames |
+| `resultats/caracteristiques/<variante>_niveau_<n>.npz` | notebook 02, partie 2 | 512 caractéristiques ResNet18 de chaque patch découpé |
+| `resultats/classifieur_final.joblib` | notebook 02, partie 4 | modèle de patch final (StandardScaler + régression logistique) |
+| `resultats/predictions_patchs_validation.csv` | notebook 02, partie 4 | probabilité de chaque patch de validation |
+| `cartes/niveau_<n>/<lame>.npz` | `cartes_chaleur.py` | caractéristiques de chaque position de tissu d'une lame (validation et test) |
+| `resultats/reglages_figes.json` | notebook 02, partie 6.4 | réglages figés avant le test |
+| `resultats/test_lames.csv`, `test_patientes.csv` | notebook 02, partie 7 | résultats du test par lame et par patiente |
+| `resultats/domain_shift_un_centre_de_cote.csv` | analyse `domain_shift` | AUC par centre, centre vu ou jamais vu |
+
+Les lames de test ne sont pas découpées en PNG : elles ne passent que par les cartes de chaleur.
+
+## Analyses complémentaires (domain shift)
+
+Les 5 hôpitaux de CAMELYON17 n'ont ni les mêmes scanners ni exactement la même coloration.
+
+- **`analyses/domain_shift/analyse_domain_shift.ipynb`** : pour chaque centre, l'AUC de ses patchs de validation avec le modèle
+  entraîné sur les 5 centres (centre vu) et sur les 4 autres seulement (centre jamais vu). Ne recalcule rien de long, mais
+  demande d'avoir lancé le découpage de la variante `retenue` et les parties 2 et 6.4 du notebook 02. Résultat : l'AUC ne
+  baisse presque pas (écart moyen +0,005) ; le centre 1 est difficile qu'il soit vu ou non.
+- **`analyses/multicentres/multicentres.ipynb`** : sur les patchs du prototype (centres 0 et 4), comparaison des couleurs
+  d'origine et des normalisations Reinhard et Macenko, à rappel égal (95 %). Pas de gain d'AUC et plus de fausses alertes :
+  les couleurs d'origine sont gardées. La méthode est ensuite testée sur le centre 2, jamais vu. Le notebook relit
+  `predictions.csv` (seul pandas est nécessaire, voir son `README.md`) ; le code de calcul d'origine est conservé dans
+  l'historique Git (commit `3c864eb`).
 
 ## Données
 
