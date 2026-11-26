@@ -1,0 +1,86 @@
+slide,set,raison,patient,node,center,slide_label,pN_stage,annotated
+patient_003_node_4,entrainement,négative,patient_003,4,0.0,negative,pN0,False
+patient_009_node_1,entrainement,annotée,patient_009,1,0.0,micro,pN1mi,True
+patient_011_node_3,entrainement,négative,patient_011,3,0.0,negative,pN1mi,False
+patient_015_node_2,entrainement,annotée,patient_015,2,0.0,macro,pN1,True
+patient_016_node_1,entrainement,annotée,patient_016,1,0.0,itc,pN1,True
+patient_017_node_1,entrainement,annotée,patient_017,1,0.0,itc,pN1,True
+patient_017_node_2,entrainement,annotée,patient_017,2,0.0,macro,pN1,True
+patient_020_node_4,entrainement,annotée,patient_020,4,1.0,macro,pN1,True
+patient_022_node_4,entrainement,annotée,patient_022,4,1.0,macro,pN1,True
+patient_024_node_1,entrainement,annotée,patient_024,1,1.0,itc,pN0(i+),True
+patient_024_node_2,entrainement,annotée,patient_024,2,1.0,itc,pN0(i+),True
+patient_025_node_2,entrainement,négative,patient_025,2,1.0,negative,pN0,False
+patient_032_node_0,entrainement,négative,patient_032,0,1.0,negative,pN1mi,False
+patient_038_node_2,entrainement,annotée,patient_038,2,1.0,micro,pN1mi,True
+patient_040_node_1,entrainement,négative,patient_040,1,2.0,negative,pN0(i+),False
+patient_044_node_4,entrainement,annotée,patient_044,4,2.0,macro,pN1,True
+patient_045_node_1,entrainement,annotée,patient_045,1,2.0,micro,pN2,True
+patient_046_node_3,entrainement,annotée,patient_046,3,2.0,micro,pN1mi,True
+patient_046_node_4,entrainement,annotée,patient_046,4,2.0,micro,pN1mi,True
+patient_052_node_1,entrainement,annotée,patient_052,1,2.0,macro,pN2,True
+patient_057_node_0,entrainement,négative,patient_057,0,2.0,negative,pN0,False
+patient_060_node_3,entrainement,annotée,patient_060,3,3.0,itc,pN1mi,True
+patient_067_node_4,entrainement,annotée,patient_067,4,3.0,micro,pN1mi,True
+patient_068_node_1,entrainement,annotée,patient_068,1,3.0,itc,pN0(i+),True
+patient_072_node_0,entrainement,annotée,patient_072,0,3.0,itc,pN1,True
+patient_073_node_1,entrainement,annotée,patient_073,1,3.0,macro,pN1,True
+patient_076_node_0,entrainement,négative,patient_076,0,3.0,negative,pN1,False
+patient_079_node_1,entrainement,négative,patient_079,1,3.0,negative,pN0,False
+patient_080_node_1,entrainement,annotée,patient_080,1,4.0,itc,pN1,True
+patient_081_node_4,entrainement,annotée,patient_081,4,4.0,itc,pN1mi,True
+patient_084_node_4,entrainement,négative,patient_084,4,4.0,negative,pN1,False
+patient_087_node_0,entrainement,annotée,patient_087,0,4.0,itc,pN0(i+),True
+patient_089_node_3,entrainement,annotée,patient_089,3,4.0,micro,pN1mi,True
+patient_094_node_3,entrainement,négative,patient_094,3,4.0,negative,pN2,False
+patient_096_node_0,entrainement,annotée,patient_096,0,4.0,macro,pN2,True
+patient_012_node_0,test,test complet (pN1),patient_012,0,0.0,macro,pN1,True
+patient_012_node_1,test,test complet (pN1),patient_012,1,0.0,negative,pN1,False
+patient_012_node_2,test,test complet (pN1),patient_012,2,0.0,negative,pN1,False
+patient_012_node_3,test,test complet (pN1),patient_012,3,0.0,negative,pN1,False
+patient_012_node_4,test,test complet (pN1),patient_012,4,0.0,negative,pN1,False
+patient_036_node_0,test,test complet (pN1mi),patient_036,0,1.0,negative,pN1mi,False
+patient_036_node_1,test,test complet (pN1mi),patient_036,1,1.0,negative,pN1mi,False
+patient_036_node_2,test,test complet (pN1mi),patient_036,2,1.0,negative,pN1mi,False
+patient_036_node_3,test,test complet (pN1mi),patient_036,3,1.0,micro,pN1mi,True
+patient_036_node_4,test,test complet (pN1mi),patient_036,4,1.0,negative,pN1mi,False
+patient_041_node_0,test,test complet (pN0(i+)),patient_041,0,2.0,itc,pN0(i+),True
+patient_041_node_1,test,test complet (pN0(i+)),patient_041,1,2.0,negative,pN0(i+),False
+patient_041_node_2,test,test complet (pN0(i+)),patient_041,2,2.0,negative,pN0(i+),False
+patient_041_node_3,test,test complet (pN0(i+)),patient_041,3,2.0,negative,pN0(i+),False
+patient_041_node_4,test,test complet (pN0(i+)),patient_041,4,2.0,negative,pN0(i+),False
+patient_053_node_0,test,test complet (pN0),patient_053,0,2.0,negative,pN0,False
+patient_053_node_1,test,test complet (pN0),patient_053,1,2.0,negative,pN0,False
+patient_053_node_2,test,test complet (pN0),patient_053,2,2.0,negative,pN0,False
+patient_053_node_3,test,test complet (pN0),patient_053,3,2.0,negative,pN0,False
+patient_053_node_4,test,test complet (pN0),patient_053,4,2.0,negative,pN0,False
+patient_062_node_0,test,test partiel (pN2),patient_062,0,3.0,micro,pN2,False
+patient_062_node_1,test,test partiel (pN2),patient_062,1,3.0,micro,pN2,False
+patient_062_node_2,test,test partiel (pN2),patient_062,2,3.0,macro,pN2,True
+patient_062_node_3,test,test partiel (pN2),patient_062,3,3.0,macro,pN2,False
+patient_062_node_4,test,test partiel (pN2),patient_062,4,3.0,negative,pN2,False
+patient_075_node_0,test,test complet (pN1),patient_075,0,3.0,negative,pN1,False
+patient_075_node_1,test,test complet (pN1),patient_075,1,3.0,negative,pN1,False
+patient_075_node_2,test,test complet (pN1),patient_075,2,3.0,negative,pN1,False
+patient_075_node_3,test,test complet (pN1),patient_075,3,3.0,negative,pN1,False
+patient_075_node_4,test,test complet (pN1),patient_075,4,3.0,macro,pN1,True
+patient_086_node_0,test,test complet (pN0(i+)),patient_086,0,4.0,itc,pN0(i+),True
+patient_086_node_1,test,test complet (pN0(i+)),patient_086,1,4.0,negative,pN0(i+),False
+patient_086_node_2,test,test complet (pN0(i+)),patient_086,2,4.0,negative,pN0(i+),False
+patient_086_node_3,test,test complet (pN0(i+)),patient_086,3,4.0,negative,pN0(i+),False
+patient_086_node_4,test,test complet (pN0(i+)),patient_086,4,4.0,itc,pN0(i+),True
+patient_098_node_0,test,test complet (pN0),patient_098,0,4.0,negative,pN0,False
+patient_098_node_1,test,test complet (pN0),patient_098,1,4.0,negative,pN0,False
+patient_098_node_2,test,test complet (pN0),patient_098,2,4.0,negative,pN0,False
+patient_098_node_3,test,test complet (pN0),patient_098,3,4.0,negative,pN0,False
+patient_098_node_4,test,test complet (pN0),patient_098,4,4.0,negative,pN0,False
+patient_008_node_1,validation,négative,patient_008,1,0.0,negative,pN1mi,False
+patient_010_node_4,validation,annotée,patient_010,4,0.0,micro,pN1mi,True
+patient_023_node_4,validation,négative,patient_023,4,1.0,negative,pN0,False
+patient_039_node_1,validation,annotée,patient_039,1,1.0,micro,pN1,True
+patient_042_node_3,validation,annotée,patient_042,3,2.0,macro,pN1,True
+patient_047_node_4,validation,négative,patient_047,4,2.0,negative,pN1,False
+patient_061_node_0,validation,négative,patient_061,0,3.0,negative,pN1mi,False
+patient_066_node_2,validation,annotée,patient_066,2,3.0,micro,pN1,True
+patient_088_node_3,validation,négative,patient_088,3,4.0,negative,pN1mi,False
+patient_099_node_4,validation,annotée,patient_099,4,4.0,macro,pN1,True
